@@ -1,0 +1,185 @@
+<section
+  class="min-vh-100 d-flex justify-content-center align-items-center text-center p-4"
+  style="background: linear-gradient(to bottom, #ffffff, #cce3f6, #83d0f9);"
+>
+  <div class="container bg-white shadow-lg rounded-4 p-5" style="max-width: 500px; width: 100%">
+    <h2 class="text-primary mb-4 fw-bold">Crear una cuenta Xmoker 🚀</h2>
+
+    <!-- Barra de progreso -->
+    <div class="mb-4 text-center" *ngIf="paso > 0">
+      <div class="progress" style="height: 8px">
+        <div
+          class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+          role="progressbar"
+          [style.width.%]="(paso / 7) * 100"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        ></div>
+      </div>
+      <div class="mt-2 fw-medium text-dark small">
+        Paso {{ paso }} de 7
+      </div>
+    </div>
+
+    <form (keydown.enter)="$event.preventDefault()" class="d-flex flex-column gap-3 text-start">
+
+      <!-- Paso 0: Botón “mantén pulsado” -->
+      <div *ngIf="paso === 0" class="fade-in text-center">
+        <p class="descripcion-campo mb-3">
+          Mantén pulsado para comenzar tu camino libre de humo 🛤️
+        </p>
+        <button
+          type="button"
+          class="btn btn-success w-100 position-relative overflow-hidden"
+          (mousedown)="startHold()"
+          (mouseup)="cancelHold()"
+          (mouseleave)="cancelHold()"
+        >
+          <!-- barra interna que muestra el progreso del hold -->
+          <div
+            class="bg-success position-absolute top-0 start-0 bottom-0"
+            [style.width.%]="(holdTime / holdDuration) * 100"
+          ></div>
+          <span class="position-relative">🚬🚫 ¡Comenzar!</span>
+        </button>
+      </div>
+
+      <!-- Flujo para USUARIO -->
+      <ng-container *ngIf="formData.tipoCuenta === 'USUARIO'">
+        <!-- Paso 1: Email -->
+        <div *ngIf="paso === 1" class="fade-in">
+          <p class="descripcion-campo">¿Cuál es tu correo electrónico?</p>
+          <input
+            id="email"
+            type="email"
+            [(ngModel)]="formData.email"
+            name="email"
+            class="form-control"
+            placeholder="tucorreo@ejemplo.com"
+            required
+          />
+          <button
+            type="button"
+            class="btn btn-primary mt-3 w-100"
+            (click)="siguientePaso()"
+            [disabled]="!formData.email"
+          >
+            Siguiente
+          </button>
+        </div>
+
+        <!-- Paso 2: Contraseña -->
+        <div *ngIf="paso === 2" class="fade-in">
+          <p class="descripcion-campo">Crea una contraseña segura (6+ caracteres)</p>
+          <input
+            id="password"
+            type="password"
+            [(ngModel)]="formData.password"
+            name="password"
+            class="form-control"
+            required
+          />
+          <button
+            type="button"
+            class="btn btn-primary mt-3 w-100"
+            (click)="siguientePaso()"
+            [disabled]="formData.password.length < 6"
+          >
+            Siguiente
+          </button>
+        </div>
+
+        <!-- Paso 3: Nombre -->
+        <div *ngIf="paso === 3" class="fade-in">
+          <p class="descripcion-campo">¿Cómo quieres que te llamemos?</p>
+          <input
+            id="nombre"
+            type="text"
+            [(ngModel)]="formData.nombre"
+            name="nombre"
+            class="form-control"
+            placeholder="Tu nombre"
+          />
+          <button
+            type="button"
+            class="btn btn-primary mt-3 w-100"
+            (click)="siguientePaso()"
+            [disabled]="!formData.nombre.trim()"
+          >
+            Siguiente
+          </button>
+        </div>
+
+        <!-- Paso 4: Fecha de inicio -->
+        <div *ngIf="paso === 4" class="fade-in">
+          <p class="descripcion-campo">Inicio de tu proceso</p>
+          <input
+            id="fechaInicioProceso"
+            type="date"
+            [(ngModel)]="formData.fechaInicioProceso"
+            name="fechaInicioProceso"
+            class="form-control"
+            readonly
+          />
+          <button type="button" class="btn btn-primary mt-3 w-100" (click)="siguientePaso()">
+            Siguiente
+          </button>
+        </div>
+
+        <!-- Paso 5: Nivel de consumo -->
+        <div *ngIf="paso === 5" class="fade-in">
+          <p class="descripcion-campo">¿Cuántos cigarrillos fumas al día?</p>
+          <input
+            id="nivelConsumo"
+            type="number"
+            [(ngModel)]="formData.nivelConsumo"
+            name="nivelConsumo"
+            class="form-control"
+            min="1"
+          />
+          <button
+            type="button"
+            class="btn btn-primary mt-3 w-100"
+            (click)="siguientePaso()"
+            [disabled]="formData.nivelConsumo < 1"
+          >
+            Siguiente
+          </button>
+        </div>
+
+        <!-- Paso 6: Motivaciones -->
+        <div *ngIf="paso === 6" class="fade-in">
+          <p class="descripcion-campo">
+            ¿Qué te motiva a dejar de fumar? (selecciona al menos una)
+          </p>
+          <div *ngFor="let motivo of motivosDisponibles" class="form-check mb-2">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [value]="motivo"
+              (change)="toggleMotivacion(motivo)"
+              [checked]="formData.motivacionesSeleccionadas.includes(motivo)"
+            />
+            <label class="form-check-label">{{ motivo }}</label>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary mt-3 w-100"
+            (click)="siguientePaso()"
+            [disabled]="formData.motivacionesSeleccionadas.length === 0"
+          >
+            Siguiente
+          </button>
+        </div>
+
+        <!-- Paso 7: Confirmación -->
+        <div *ngIf="paso === 7" class="fade-in">
+          <p class="descripcion-campo">¡Todo listo! Pulsa para registrarte.</p>
+          <button type="button" class="btn btn-success w-100" (click)="registrar()">
+            Registrarme
+          </button>
+        </div>
+      </ng-container>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,75 @@
+<app-navbar-superior></app-navbar-superior>
+<section class="min-vh-100 p-4 pb-5" style="background: linear-gradient(to bottom, #ffffff, #cce3f6, #83d0f9);">
+  <h2 class="text-primary fw-bold text-center mb-4">📈 Tus Estadísticas Personalizadas</h2>
+
+  <!-- Botones guía y volver -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <button class="btn btn-outline-secondary btn-sm rounded-4" (click)="volverAlDiario()">
+      ⬅️ Volver al Diario
+    </button>
+    <button class="btn btn-outline-info btn-sm rounded-4" (click)="modalInfoAbierto = true">
+      ℹ️ Guía de uso
+    </button>
+  </div>
+
+  <!-- Pestañas de estadísticas -->
+  <mat-tab-group mat-stretch-tabs dynamicHeight class="bg-white rounded-4 shadow-sm p-3"
+                 (selectedTabChange)="onTabChange($event)">
+    <mat-tab label="Emociones">
+      <div style="height: 400px;">
+        <canvas baseChart
+                #emocionesChart
+                [data]="chartDataEmociones"
+                [options]="chartOptions"
+                [type]="'bar'">
+        </canvas>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Estrategias">
+      <div style="height: 400px;">
+        <canvas baseChart
+                #estrategiasChart
+                [data]="chartDataEstrategias"
+                [options]="chartOptions"
+                [type]="'pie'">
+        </canvas>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Dificultades">
+      <div style="height: 400px;">
+        <canvas baseChart
+                #complicacionesChart
+                [data]="chartDataComplicaciones"
+                [options]="chartOptions"
+                [type]="'bar'">
+        </canvas>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</section>
+
+<!-- Modal guía de uso -->
+<div *ngIf="modalInfoAbierto"
+     [ngClass]="{'slide-up-fade-in': !modalInfoCerrando, 'slide-down-fade-out': modalInfoCerrando}"
+     class="modal show d-block" tabindex="-1" style="background: rgba(0,0,0,0.6);">
+
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 p-4">
+      <h5 class="modal-title fw-bold text-primary mb-3">ℹ️ Guía de Estadísticas</h5>
+      <p class="text-dark text-start">
+        Aquí puedes visualizar tu evolución emocional, las estrategias más utilizadas y las dificultades frecuentes.
+        <br><br>
+        📌 Usa emociones y dificultades predefinidas al registrar tus días para que se reflejen correctamente en los gráficos.
+        <br><br>
+        Cada pestaña muestra una dimensión clave de tu progreso con Xmoker.
+      </p>
+      <div class="text-center mt-4">
+        <button class="btn btn-primary rounded-4" (click)="cerrarInfo()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-navbar-inferior></app-navbar-inferior>

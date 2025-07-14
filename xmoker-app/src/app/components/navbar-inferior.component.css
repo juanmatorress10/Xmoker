@@ -1,0 +1,7 @@
+.navbar a div {
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .navbar a:hover div {
+    transform: scale(1.1);
+  }

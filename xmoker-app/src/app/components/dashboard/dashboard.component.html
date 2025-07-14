@@ -1,0 +1,105 @@
+<app-navbar-superior></app-navbar-superior>
+
+<section class="min-vh-100 d-flex flex-column justify-content-between text-center p-4 pb-5"
+         style="background: linear-gradient(to bottom, #ffffff, #cce3f6, #83d0f9); position: relative;">
+
+  <!-- Header -->
+  <div>
+    <h2 class="text-primary fw-bold">¡Hola {{ nombreUsuario }} 👋!</h2>
+    <p class="mt-2 text-dark">¡Hoy es otro gran día para seguir avanzando!</p>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMsg" class="alert alert-danger mt-3" role="alert">
+    {{ errorMsg }}
+  </div>
+
+  <!-- Contenido principal -->
+  <div *ngIf="!isLoading && !errorMsg">
+
+    <!-- Métricas -->
+    <div class="mt-5">
+      <h4 class="text-success mb-3">Tu progreso hasta hoy:</h4>
+      <div class="d-flex flex-wrap justify-content-center gap-3">
+
+        <div class="card shadow-sm p-3 rounded-4" style="width: 10rem;">
+          <div class="fw-bold">Días sin fumar</div>
+          <div class="display-6 text-primary">{{ diasSinFumar }}</div>
+        </div>
+
+        <div class="card shadow-sm p-3 rounded-4" style="width: 10rem;">
+          <div class="fw-bold">Cigarrillos evitados</div>
+          <div class="display-6 text-primary">{{ cigarrillosEvitados }}</div>
+        </div>
+
+        <div class="card shadow-sm p-3 rounded-4" style="width: 10rem;">
+          <div class="fw-bold">Dinero ahorrado</div>
+          <div class="display-6 text-primary">{{ dineroAhorrado }}</div>
+        </div>
+
+        <div class="card shadow-sm p-3 rounded-4" style="width: 10rem;">
+          <div class="fw-bold">Vida ganada</div>
+          <div class="display-6 text-primary">{{ horasVidaGanadas }} h</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Botón de estadísticas -->
+    <div class="text-center mt-4">
+      <button class="btn btn-info rounded-4" (click)="verEstadisticas()">
+        📈 Ver más estadísticas
+      </button>
+    </div>
+
+    <!-- Perfil de fumador -->
+    <div *ngIf="descripcionFumador" class="card shadow-sm p-4 rounded-4 mt-4 mx-auto text-start"
+         style="max-width: 700px; background-color: #f7fafd;">
+      <h5 class="text-primary mb-2">🧾 Tu estilo de fumador</h5>
+
+      <!-- Tipos traducidos -->
+      <p class="mb-3 fw-semibold text-dark">
+        {{ formatearTipo(tipoFumador) }}
+      </p>
+
+      <!-- Descripción -->
+      <p class="text-dark" style="white-space: pre-line;">
+        {{ descripcionFumador }}
+      </p>
+
+      <!-- Botón consejos -->
+      <div class="text-end mt-3">
+        <button class="btn btn-outline-primary" (click)="mostrarConsejos()">
+          🔍 Ver consejos personalizados
+        </button>
+      </div>
+    </div>
+
+<!-- Botones de acción: ansiedad y recaída -->
+<div class="text-center mt-4 mb-5 d-flex flex-column align-items-center gap-3">
+  <button class="btn btn-primary text-white fw-semibold rounded-4 px-4 py-2 shadow w-auto"
+          (click)="abrirModalAnsiedad()">
+    🧘‍♂️ Gestionar ansiedad por fumar
+  </button>
+
+  <button class="btn btn-danger text-white px-4 py-2 shadow rounded-4 w-auto"
+          (click)="abrirFormularioRecaida()">
+    ❌ He tenido una recaída
+  </button>
+
+  <span class="text-muted fst-italic small mt-1">No es un fallo, es parte del proceso 💪</span>
+</div>
+
+
+  </div>
+
+  <app-navbar-inferior></app-navbar-inferior>
+
+</section>

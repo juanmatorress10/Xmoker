@@ -1,0 +1,10 @@
+app-navbar-inferior {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1055; /* Por encima del paginator y otros componentes */
+    background-color: #ffffff; /* Fondo blanco o el color que uses */
+    border-top: 1px solid #dee2e6; /* Una ligera línea de separación */
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05); /* Sombra suave hacia arriba */
+  }

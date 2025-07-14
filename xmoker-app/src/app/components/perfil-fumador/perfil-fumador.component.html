@@ -1,0 +1,29 @@
+<section class="min-vh-100 d-flex justify-content-center align-items-center p-4"
+         style="background: linear-gradient(to bottom, #ffffff, #cce3f6, #83d0f9);">
+
+  <div class="container bg-white shadow-lg rounded-4 p-5" style="max-width: 700px; width: 100%;">
+    <h2 class="text-primary mb-4 fw-bold text-center">¡Este es tu perfil de fumador!</h2>
+
+    <div class="mb-4">
+      <h5 class="text-success">Categorías más destacadas:</h5>
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let categoria of perfil.categoriasAltas" class="list-group-item">
+          🔹 {{ categoria }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="mb-4">
+      <h5 class="text-success">Análisis personalizado:</h5>
+      <p class="text-dark" style="white-space: pre-line;">
+        {{ perfil.mensajeResumen }}
+      </p>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+      <button class="btn btn-primary btn-lg" (click)="irAlDashboard()">
+        Ir al Dashboard
+      </button>
+    </div>
+  </div>
+</section>

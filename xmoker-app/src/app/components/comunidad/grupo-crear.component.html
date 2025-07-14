@@ -1,0 +1,45 @@
+<app-navbar-superior></app-navbar-superior>
+
+<div class="bg-xmoker-gradient min-h-[calc(100vh-140px)] px-4 py-6">
+  <div class="max-w-xl mx-auto bg-white shadow rounded p-6">
+    <h2 class="text-2xl font-bold text-blue-800 mb-4 text-center">🫂 Crear grupo privado</h2>
+
+    <form *ngIf="!grupoCreado" (ngSubmit)="crearGrupo()" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Nombre del grupo</label>
+        <input type="text" [(ngModel)]="grupo.nombre" name="nombre"
+               class="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+               placeholder="Ej. Somos libres 💙" required />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Descripción</label>
+        <textarea [(ngModel)]="grupo.descripcion" name="descripcion"
+                  class="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+                  placeholder="Nuestra motivación, apoyo, metas..."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-full mt-4">
+        ➕ Crear Grupo Privado
+      </button>
+    </form>
+
+    <!-- 🎉 Grupo creado: mostrar código -->
+    <div *ngIf="grupoCreado" class="text-center space-y-4">
+      <h3 class="text-xl font-semibold text-green-700 mt-2">¡Grupo creado con éxito! 🎉</h3>
+      <p class="text-gray-700">Comparte este código con tus amigos para que puedan unirse:</p>
+
+      <div class="text-lg font-mono bg-gray-100 border border-gray-300 rounded p-3 select-all">
+        {{ grupoCreado.codigoAcceso }}
+      </div>
+
+      <button class="btn btn-outline-primary mt-3" (click)="copiarAlPortapapeles(grupoCreado.codigoAcceso)">
+        📋 Copiar código
+      </button>
+
+      <button class="btn btn-primary w-full" (click)="irAComunidad()">Ir a mi grupo</button>
+    </div>
+  </div>
+</div>
+
+<app-navbar-inferior></app-navbar-inferior>

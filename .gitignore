@@ -1,0 +1,90 @@
+# ----------------------------------------------------------------
+# ARCHIVO .GITIGNORE RECOMENDADO PARA PROYECTOS FRONTEND (ANGULAR/REACT/VUE)
+# ----------------------------------------------------------------
+# Este archivo especifica los archivos y carpetas que Git debe ignorar.
+# Es crucial para no subir al repositorio archivos innecesarios, compilados o sensibles.
+
+# ## DEPENDENCIAS Y PAQUETES
+# La carpeta node_modules contiene todas las librerías de terceros.
+# Se puede regenerar en cualquier momento con `npm install`, por lo que NUNCA debe subirse.
+/node_modules/
+
+# ## ARCHIVOS DE PRODUCCIÓN Y COMPILADOS (BUILD)
+# Estas carpetas contienen la versión final y optimizada de la aplicación que se despliega.
+# Se generan a partir del código fuente con `npm run build`.
+/dist/
+/dist-server/
+/out-tsc/
+/build/
+*.js.map
+*.css.map
+
+# ## LOGS Y REPORTES
+# Archivos de registro y depuración que se generan durante la ejecución o las pruebas.
+/logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+/coverage/
+/test-results/
+
+# ## CACHÉ DE HERRAMIENTAS Y EDITORES
+# Archivos y carpetas temporales que utilizan los editores de código y las herramientas
+# de desarrollo para acelerar los procesos. Son específicos de cada máquina.
+# Editores
+.idea/
+.vscode/
+# Caché de Angular/Vite/etc.
+/.angular/cache
+/.ng_build
+/.ng_pkg_build
+/.vite/
+.cache/
+# Otras herramientas
+/.sass-cache/
+/.eslintcache
+/.history/
+.rpt2_cache/
+*.tsbuildinfo
+
+# ## ARCHIVOS DE ENTORNO LOCAL (.env)
+# ¡MUY IMPORTANTE! Estos archivos suelen contener claves de API, contraseñas de bases de datos
+# y otra información sensible. Ignorarlos previene que se suban secretos al repositorio público.
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# ## ARCHIVOS DEL SISTEMA OPERATIVO
+# Archivos de metadatos generados automáticamente por Windows, macOS y Linux.
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ## ARCHIVOS GENERADOS POR TYPESCRIPT Y ANGULAR (TEMPORALES)
+# Estos archivos son el resultado de la compilación de TypeScript a JavaScript o artefactos
+# intermedios del compilador de Angular. El código fuente real está en los archivos .ts.
+*.ngsummary.json
+*.ngfactory.ts
+*.ngstyle.ts
+*.ngtypecheck.ts
+
+# ## PAQUETES COMPRIMIDOS
+# Ignora cualquier paquete que se haya podido generar.
+*.tgz
+
+# ## ARCHIVOS DE IMAGEN 
+# Ignora los formatos de imagen más comunes. Esto es útil si tu aplicación permite a los
+# usuarios subir imágenes y no quieres que se almacenen en el repositorio.
+# Si tus imágenes son parte del diseño (logos, iconos), considera no ignorarlas.
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
+*.bmp
+*.webp

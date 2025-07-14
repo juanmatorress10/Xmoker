@@ -1,0 +1,13 @@
+/* Mejorar animaciones y espacio */
+section {
+    background: linear-gradient(to bottom, #ffffff, #cce3f6, #83d0f9);
+  }
+  
+  canvas {
+    margin-top: 20px;
+  }
+  
+  p {
+    font-size: 1rem;
+  }
+  

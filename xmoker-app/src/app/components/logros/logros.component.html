@@ -1,0 +1,105 @@
+<app-navbar-superior></app-navbar-superior>
+
+<div class="home-section p-4 max-w-7xl mx-auto">
+
+  <!-- 🔋 Panel de experiencia -->
+  <div class="mb-10 bg-white rounded-xl shadow-md p-6 flex flex-col md:flex-row items-center justify-between gap-4 border border-gray-200">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">🎖️ ¡Hola {{ nombreUsuario }}!</h1>
+      <p class="text-sm text-gray-600">Nivel {{ nivel }} · {{ experiencia }}/{{ experienciaMax }} XP</p>
+    </div>
+    <div class="w-full md:w-1/2 h-4 bg-gray-300 rounded-lg overflow-hidden shadow-inner">
+      <div class="h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-500"
+           [style.width.%]="porcentajeNivel"></div>
+    </div>
+  </div>
+
+  <!-- Panel superior con filtro e Info -->
+  <div class="mb-10 bg-white rounded-xl shadow-md p-6 flex flex-col md:flex-row items-center justify-between gap-4 border border-gray-200">
+    <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-2">
+      🏅 Tus logros
+    </h1>
+    <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+      <div class="w-full md:w-64">
+        <label class="block mb-1 font-semibold text-gray-600 text-sm">Filtrar por categoría:</label>
+        <select [(ngModel)]="categoriaSeleccionada"
+                class="border border-gray-300 rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 w-full">
+          <option value="Todos">Todas</option>
+          <option *ngFor="let c of categorias">{{ c }}</option>
+        </select>
+      </div>
+      <button class="btn btn-outline-info btn-sm rounded-4" (click)="openInfoModal()">
+        ℹ️ Info
+      </button>
+    </div>
+  </div>
+
+  <!-- Sección: Completados -->
+  <div class="mb-8">
+    <h2 class="text-center text-2xl font-bold text-green-700 cursor-pointer flex items-center justify-center gap-2"
+        (click)="toggle('completados')">
+      ✅ Logros desbloqueados
+      <span class="transform transition-transform duration-200" [class.rotate-180]="!seccionesVisibles.completados">▼</span>
+    </h2>
+    <div *ngIf="seccionesVisibles.completados" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <ng-container *ngFor="let ul of filtrarPorCategoria(logrosCompletados)">
+        <app-logro-card [usuarioLogro]="ul" [completado]="true"></app-logro-card>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Sección: Disponibles -->
+  <div class="mb-8">
+    <h2 class="text-center text-2xl font-bold text-blue-700 cursor-pointer flex items-center justify-center gap-2"
+        (click)="toggle('disponibles')">
+      🎁 Listos para reclamar
+      <span class="transform transition-transform duration-200" [class.rotate-180]="!seccionesVisibles.disponibles">▼</span>
+    </h2>
+    <div *ngIf="seccionesVisibles.disponibles" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <ng-container *ngFor="let ul of filtrarPorCategoria(logrosDisponibles)">
+        <app-logro-card
+          [usuarioLogro]="ul"
+          [completado]="false"
+          [disponibleParaReclamar]="true"
+          (onReclamado)="recargarLogros()">
+        </app-logro-card>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Sección: En progreso -->
+  <div>
+    <h2 class="text-center text-2xl font-bold text-gray-600 cursor-pointer flex items-center justify-center gap-2"
+        (click)="toggle('enProgreso')">
+      🔄 Logros en progreso
+      <span class="transform transition-transform duration-200" [class.rotate-180]="!seccionesVisibles.enProgreso">▼</span>
+    </h2>
+    <div *ngIf="seccionesVisibles.enProgreso" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <ng-container *ngFor="let ul of filtrarPorCategoria(logrosEnProgreso)">
+        <app-logro-card [usuarioLogro]="ul" [completado]="false"></app-logro-card>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<app-navbar-inferior></app-navbar-inferior>
+
+<!-- Modal Info de Logros -->
+<ng-container *ngIf="showInfoModal">
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-md p-6">
+      <h3 class="text-xl font-semibold mb-4">ℹ️ ¿Qué son los Logros?</h3>
+      <p class="text-gray-700 mb-4">
+        Aquí encontrarás todos tus logros de Xmoker: los que ya has desbloqueado, los que puedes reclamar
+        y los que todavía estás avanzando. Completa retos y acciones en la comunidad para subir de nivel
+        y ganar recompensas. ¡Sigue adelante y no pares hasta conseguirlos todos! 💪🚀
+      </p>
+      <div class="flex justify-end">
+        <button class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                (click)="closeInfoModal()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>

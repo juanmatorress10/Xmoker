@@ -1,0 +1,29 @@
+/* logros.component.css */
+.home-section {
+    background: linear-gradient(to bottom, #ffffff, #cce3f6, #0077b6);
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  
+/* Selector de categoría */
+select {
+  @apply border border-gray-300 rounded-md px-3 py-2 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400;
+  transition: border-color 0.3s ease;
+}
+
+/* Título de cada sección */
+.seccion-titulo {
+  @apply text-2xl font-bold flex items-center gap-2 cursor-pointer transition-colors duration-300;
+}
+
+.seccion-titulo:hover {
+  @apply text-green-600;
+}
+
+/* Ícono rotatorio de desplegar */
+.seccion-icono {
+  @apply transition-transform duration-300 ml-2 text-sm;
+}
+.rotado {
+  transform: rotate(180deg);
+}

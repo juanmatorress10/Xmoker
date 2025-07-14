@@ -1,0 +1,262 @@
+<div class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+     style="background-color: rgba(0, 0, 0, 0.6); z-index: 1050;">
+  <div class="p-4 rounded-4 shadow-lg w-100"
+       [ngClass]="claseDeFondo"
+       style="max-width: 500px; max-height: 90vh; overflow-y: auto;">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="fw-bold text-primary m-0">🧘‍♀️ Gestionar Ansiedad</h4>
+      <button class="btn-close" (click)="cerrar()"></button>
+    </div>
+
+        <!-- MENÚ PRINCIPAL -->
+    <div *ngIf="seccionActiva === 'inicio'" class="d-grid gap-2">
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('respiracion')">🌬️ Respiración guiada</button>
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('sonidos')">🎧 Sonidos relajantes</button>
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('juegos')">🧠 Mini Juegos mentales</button>
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('motivacion')">💬 Recordar mis motivaciones</button>
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('fisico')">🏃‍♀️ Estiramiento rápido</button>
+    </div>
+
+
+        <!-- SUBMENÚ: SONIDOS RELAJANTES -->
+    <div *ngIf="seccionActiva === 'sonidos'" class="d-grid gap-2 text-center">
+      <h5 class="text-primary fw-semibold mb-3">Elige una escena sonora:</h5>
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('sonido-mar')">🌊 Sonido del mar</button>
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('sonido-lluvia')">🌧️ Sonido de lluvia</button>
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('sonido-bosque')">🌲 Sonido del bosque</button>
+    </div>
+
+        <!-- SUBMENÚ: JUEGOS MENTALES -->
+    <div *ngIf="seccionActiva === 'juegos'" class="d-grid gap-2 text-center">
+      <h5 class="text-primary fw-semibold mb-3">Elige un reto mental:</h5>
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('juego-cuenta')">🔢 Cuenta regresiva</button>
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('juego-emojis')">🧐 Encuentra el emoji diferente</button>
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('juego-stroop')">🔴 Color vs palabra</button>
+      <button class="btn btn-outline-primary" (click)="cambiarSeccion('juego-memoria')">🧠 Memoria rápida</button>
+    </div>
+
+
+
+    <!-- RESPIRACIÓN GUIADA -->
+    <div *ngIf="seccionActiva === 'respiracion'" class="text-center">
+      <p class="text-muted fst-italic">
+        Esta técnica te ayudará a recuperar el control de tu respiración y calmar la ansiedad. Respira con calma, sin forzar.
+      </p>
+      <p class="fw-bold text-primary mt-3">{{ mensajeRespiracion }}</p>
+      <div class="d-flex justify-content-center align-items-center my-4" style="height: 140px;">
+        <div class="circulo-animado" [ngClass]="estadoAnimacion"></div>
+      </div>
+      <p class="text-secondary small mb-2">Ciclo {{ ciclosRespiracion + 1 }}/3</p>
+      <div class="progress rounded-5 mx-auto" style="height: 10px; max-width: 300px;">
+        <div class="progress-bar" [style.width.%]="((ciclosRespiracion) / 3) * 100"
+             style="transition: width 0.5s ease;" role="progressbar"></div>
+      </div>
+      <div *ngIf="!enRespiracion && !respiracionFinalizada" class="mt-4">
+        <button class="btn btn-primary" (click)="iniciarRespiracion()">▶ Empezar</button>
+      </div>
+      <div *ngIf="respiracionFinalizada" class="mt-4">
+        <p class="text-success fw-semibold">¡Respiración completada! 🌬️</p>
+        <button class="btn btn-success" (click)="registrarAccion('respiracion')">✔ Me siento mejor</button>
+      </div>
+    </div>
+
+    <!-- ESCENA: SONIDO DEL MAR -->
+    <app-escena-relajante
+      *ngIf="seccionActiva === 'sonido-mar'"
+      [titulo]="'🌊 Relajación en la playa'"
+      [textoGuiado]="[
+        'Estás en la orilla de una playa tranquila.',
+        'Siente la brisa del mar acariciar tu rostro…',
+        'Las olas rompen con suavidad frente a ti, marcando un ritmo sereno.',
+        'Con cada respiración, te sientes más ligero...',
+        'Cierra los ojos unos segundos… imagina que estás allí.'
+      ]"
+
+      audioSrc="audios/mar.mp3"
+      tipoRegistro="sonido-mar"
+      [onRegistrar]="registrarSonidoMar"
+    />
+
+    <!-- ESCENA: SONIDO DE LLUVIA -->
+    <app-escena-relajante
+      *ngIf="seccionActiva === 'sonido-lluvia'"
+      [titulo]="'🌧️ Bajo la lluvia'"
+      [textoGuiado]="[
+        'Te encuentras bajo un tejado de madera, mirando la lluvia caer.',
+        'Cada gota que golpea el suelo marca un compás suave.',
+        'El olor a tierra mojada te conecta con la calma.',
+        'La lluvia limpia tus pensamientos y alivia la tensión.',
+        'Cierra los ojos unos segundos… imagina que estás allí.'
+      ]"
+      audioSrc="audios/lluvia.mp3"
+      tipoRegistro="sonido-lluvia"
+      [onRegistrar]="registrarSonidoLluvia"
+    />
+
+    <!-- ESCENA: BOSQUE -->
+    <app-escena-relajante
+      *ngIf="seccionActiva === 'sonido-bosque'"
+      [titulo]="'🌲 Paseo por el bosque'"
+      [textoGuiado]="[
+        'Caminas por un sendero cubierto de hojas suaves.',
+        'Los árboles te rodean, altos y tranquilos.',
+        'El canto de los pájaros acompaña cada paso.',
+        'Sientes la paz de estar en contacto con la naturaleza.',
+        'Cierra los ojos unos segundos… imagina que estás allí.'
+      ]"
+      audioSrc="audios/bosque.mp3"
+      tipoRegistro="sonido-bosque"
+      [onRegistrar]="registrarSonidoBosque"
+    />
+
+  <!-- JUEGO 1: CUENTA REGRESIVA DINÁMICA -->
+  <div *ngIf="seccionActiva === 'juego-cuenta'" class="text-center">
+    <p class="fw-bold text-primary mt-3">Empieza desde <strong>{{ contador }}</strong>. Resta de 7 en 7:</p>
+    <div *ngIf="!enProgreso" class="mt-3">
+      <button class="btn btn-primary" (click)="iniciarCuentaRegresiva()">▶ Empezar</button>
+    </div>
+    <div *ngIf="enProgreso" class="mt-3">
+      <button class="btn btn-danger" (click)="detenerCuentaRegresiva()">⏹ Detener</button>
+    </div>
+    <div *ngIf="terminado" class="mt-3">
+      <p class="text-success">¡Bien hecho!</p>
+      <button class="btn btn-success" (click)="registrarAccion('juego-cuenta')">✔ Terminado</button>
+    </div>
+  </div>
+
+  <!-- JUEGO 2: EMOJI DIFERENTE -->
+  <div *ngIf="seccionActiva === 'juego-emojis'" class="text-center">
+    <p class="fw-bold text-primary mb-2">🧠 Nivel {{ nivelEmoji }}: Encuentra el emoji diferente</p>
+
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+      <button class="btn btn-light" *ngFor="let emoji of emojis; let i = index" (click)="seleccionarEmoji(i)">
+        {{ emoji }}
+      </button>
+    </div>
+
+    <div *ngIf="respuestaEmoji !== null" class="mt-3">
+      <p [ngClass]="{ 'text-success': respuestaEmoji, 'text-danger': !respuestaEmoji }">
+        {{ respuestaEmoji ? '¡Correcto! Subiendo dificultad...' : 'Intenta otra vez 😅' }}
+      </p>
+      <button class="btn btn-outline-primary mt-2" (click)="resetEmoji()">🔁 Nueva ronda</button>
+      <button class="btn btn-success mt-2 ms-2" (click)="registrarAccion('juego-emojis')">✔ Terminar juego</button>
+    </div>
+  </div>
+
+
+  <!-- JUEGO 3: STROOP COLOR VS PALABRA -->
+  <div *ngIf="seccionActiva === 'juego-stroop'" class="text-center">
+    <p class="fw-bold text-primary mb-2">🎯 Nivel {{ nivelStroop }}: ¿De qué color es esta palabra?</p>
+    <h2 [style.color]="colorActual" class="fw-bold my-3">{{ palabraActual }}</h2>
+
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+      <button
+        *ngFor="let color of colores.slice(0, nivelStroop + 2)"
+        class="btn"
+        [ngClass]="{
+          'btn-outline-danger': color === 'red',
+          'btn-outline-primary': color === 'blue',
+          'btn-outline-success': color === 'green',
+          'btn-outline-warning': color === 'yellow',
+          'btn-outline-secondary': color === 'purple',
+          'btn-outline-pink': color === 'deeppink'
+        }"
+        (click)="seleccionarColor(color)">
+        {{ color | titlecase }}
+      </button>
+    </div>
+
+    <div *ngIf="resultadoStroop !== null" class="mt-3">
+      <p [ngClass]="{ 'text-success': resultadoStroop, 'text-danger': !resultadoStroop }">
+        {{ resultadoStroop ? '¡Correcto!' : 'Incorrecto 😅' }}
+      </p>
+      <button class="btn btn-outline-primary mt-2" (click)="continuarStroop()">🔁 Otra</button>
+      <button class="btn btn-success mt-2 ms-2" (click)="registrarAccion('juego-stroop')">✔ Terminar juego</button>
+    </div>
+  </div>
+
+
+  <!-- JUEGO 4: MEMORIA RÁPIDA -->
+<div *ngIf="seccionActiva === 'juego-memoria'" class="text-center">
+  <p class="fw-bold text-primary">Recuerda estos emojis:</p>
+
+  <div *ngIf="!mostrarOpciones">
+    <div class="fs-3">{{ emojisMemoria.join(' ') }}</div>
+    <p class="text-muted mt-2">Tiempo restante: {{ tiempoRestanteMemoria }}s</p>
+    <div class="progress mx-auto" style="max-width: 300px; height: 10px;">
+      <div class="progress-bar" [style.width.%]="(tiempoRestanteMemoria / 4) * 100"></div>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarOpciones">
+    <p class="mt-3">¿Cuál de estos <strong>NO</strong> estaba?</p>
+    <div class="d-flex justify-content-center gap-2">
+      <button class="btn btn-light" *ngFor="let opcion of opcionesMemoria" (click)="seleccionarMemoria(opcion)">
+        {{ opcion }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="resultadoMemoria !== null" class="mt-3">
+    <p [ngClass]="{ 'text-success': resultadoMemoria, 'text-danger': !resultadoMemoria }">
+      {{ resultadoMemoria ? '¡Bien recordado!' : 'No exactamente. Intenta otra vez.' }}
+    </p>
+    <button class="btn btn-outline-primary mt-2" (click)="generarMemoria()">🔁 Reintentar</button>
+    <button class="btn btn-success mt-2 ms-2" (click)="registrarAccion('juego-memoria')">✔ Terminado</button>
+  </div>
+</div>
+
+
+<!-- SECCIÓN: MOTIVACIÓN -->
+<div *ngIf="seccionActiva === 'motivacion'" class="text-center space-y-4">
+  <h2 class="text-xl font-bold text-blue-600">Tus motivos, tu fuerza 💙</h2>
+  <p class="text-sm text-gray-500">
+    A veces olvidar es humano, por eso estamos aquí para recordarte por qué empezaste este camino.
+  </p>
+
+  <ul class="text-left text-gray-700 list-disc pl-6 space-y-1" *ngIf="motivacionesUsuario.length > 0; else sinMotivaciones">
+    <li *ngFor="let motivo of motivacionesUsuario">
+      {{ motivo }}
+    </li>
+  </ul>
+
+  <ng-template #sinMotivaciones>
+    <p class="text-gray-400 italic">
+      Aún no has añadido tus motivaciones. Puedes hacerlo desde tu perfil cuando estés listo ✨
+    </p>
+  </ng-template>
+
+  <button class="btn btn-success mt-4" (click)="registrarAccion('motivacion')">
+    💪 Gracias por recordármelo
+  </button>
+</div>
+
+
+
+    <!-- SECCIÓN: FÍSICO -->
+<div *ngIf="seccionActiva === 'fisico'" class="text-center space-y-4">
+  <h2 class="text-xl font-bold text-blue-600">Momento para tu cuerpo 💪</h2>
+  <p class="text-gray-600 text-sm">Te proponemos un pequeño reinicio físico. Hazlo a tu ritmo:</p>
+
+  <ul class="text-left text-gray-700 list-disc pl-6 max-w-md mx-auto space-y-1 text-sm">
+    <li>Levántate despacio y respira profundo 3 veces.</li>
+    <li>Da una vuelta corta o camina 10 pasos.</li>
+    <li>Estira cuello (de lado a lado) y hombros.</li>
+    <li>Relaja las manos y sacude brazos suavemente.</li>
+    <li>Sonríe, aunque sea un poco 🙂</li>
+  </ul>
+
+  <p class="text-gray-500 text-xs">Mover el cuerpo rompe el ciclo de tensión. Bien hecho.</p>
+
+  <button class="btn btn-success" (click)="registrarAccion('fisico')">🏃 ¡Listo, me siento mejor!</button>
+</div>
+
+    <!-- BOTÓN VOLVER -->
+    <div *ngIf="seccionActiva !== 'inicio'" class="text-center mt-4">
+      <button class="btn btn-outline-secondary btn-sm" (click)="cambiarSeccion('inicio')">⬅ Volver</button>
+    </div>
+
+  </div>
+</div>

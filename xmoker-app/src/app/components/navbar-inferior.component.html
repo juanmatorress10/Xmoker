@@ -1,0 +1,36 @@
+<nav class="navbar fixed-bottom bg-white shadow-lg p-2 rounded-top-4" style="height: 70px;">
+    <div class="d-flex justify-content-around w-100 align-items-center">
+  
+      <a [routerLink]="'/dashboard'" 
+         routerLinkActive="text-primary fw-bold" 
+         class="text-center text-decoration-none text-dark">
+        <div class="small">🏠<br>Dashboard</div>
+      </a>
+  
+      <a [routerLink]="'/dashboard/metricas-avanzadas'" 
+         routerLinkActive="text-primary fw-bold"
+         class="text-center text-decoration-none text-dark">
+        <div class="small">📈<br>Estadísticas</div>
+      </a>
+  
+      <a [routerLink]="'/dashboard/diario'" 
+         routerLinkActive="text-primary fw-bold"
+         class="text-center text-decoration-none text-dark">
+        <div class="small">📓<br>Diario</div>
+      </a>
+  
+      <a [routerLink]="'/logros'" 
+         routerLinkActive="text-primary fw-bold"
+         class="text-center text-decoration-none text-dark">
+        <div class="small">🏆<br>Logros</div>
+      </a>
+  
+      <a [routerLink]="'/comunidad'" 
+        routerLinkActive="text-primary fw-bold"
+        class="text-center text-decoration-none text-dark">
+        <div class="small">🌐<br>Comunidad</div>
+      </a>
+  
+    </div>
+  </nav>
+  

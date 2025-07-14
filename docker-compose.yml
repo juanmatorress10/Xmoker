@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:15
+    container_name: xmoker-db
+    environment:
+      POSTGRES_DB: xmokerdb
+      POSTGRES_USER: xmoker
+      POSTGRES_PASSWORD: xmoker123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./xmoker-backend/xmoker-backend
+      dockerfile: Dockerfile
+    image: xmoker-backend
+    container_name: xmoker-backend
+    ports:
+      - "9090:9090"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/xmokerdb
+      SPRING_DATASOURCE_USERNAME: xmoker
+      SPRING_DATASOURCE_PASSWORD: xmoker123
+
+  frontend:
+    build:
+      context: ./xmoker-app
+      dockerfile: Dockerfile
+    image: xmoker-frontend
+    container_name: xmoker-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

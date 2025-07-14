@@ -1,0 +1,19 @@
+<div class="modal-overlay d-flex justify-content-center align-items-center">
+  <div class="modal-content card p-4 rounded-4 shadow-lg w-100" style="max-width: 700px;">
+    <h4 class="text-primary mb-4 text-center">🧠 Consejos personalizados para ti</h4>
+
+    <div *ngFor="let item of consejosSeleccionados" class="mb-4">
+      <div class="fw-bold text-secondary">🔹 {{ item.categoria }}</div>
+      <p class="text-dark">{{ item.consejo }}</p>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+      <button class="btn btn-outline-primary" (click)="generarConsejos()">
+        🔄 Dame otros consejos
+      </button>
+      <button class="btn btn-outline-danger" (click)="cerrar()">
+        ❌ Cerrar
+      </button>
+    </div>
+  </div>
+</div>

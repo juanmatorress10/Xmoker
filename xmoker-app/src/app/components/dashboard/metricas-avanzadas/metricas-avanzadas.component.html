@@ -1,0 +1,116 @@
+<app-navbar-superior></app-navbar-superior>
+
+<section
+  class="min-vh-100 d-flex flex-column justify-content-between text-center p-4"
+  style="background: linear-gradient(to bottom, #ffffff, #cce3f6, #83d0f9);"
+>
+  <div>
+    <h2 class="text-primary fw-bold mb-4">📊 Tus estadísticas detalladas</h2>
+
+    <!-- Filtro + botón Info -->
+    <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mb-4">
+      <select
+        [(ngModel)]="filtro"
+        class="form-select rounded-4"
+        style="max-width: 15rem;"
+      >
+        <option value="">Todas las métricas</option>
+        <option *ngFor="let metrica of metricas" [value]="metrica.nombre">
+          {{ metrica.nombre }}
+        </option>
+      </select>
+      <button
+        class="btn btn-outline-info btn-sm rounded-4"
+        (click)="openPageInfoModal()"
+      >
+        ℹ️ Info
+      </button>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-center gap-4">
+      <div
+        *ngFor="let metrica of metricasFiltradas"
+        (click)="mostrarDescripcion(metrica.nombre)"
+        class="card p-3 shadow-sm rounded-4"
+        style="width: 15rem; cursor: pointer;"
+      >
+        <div class="fw-bold">{{ metrica.nombre }}</div>
+
+        <div *ngIf="esPorcentaje(metrica.nombre); else valorSimple" class="mt-3">
+          <canvas
+            baseChart
+            [data]="{
+              labels: ['Recuperado', 'Faltante'],
+              datasets: [{
+                data: [obtenerValorNumerico(metrica.valor), 100 - obtenerValorNumerico(metrica.valor)],
+                backgroundColor: ['#4CAF50', '#E0E0E0']
+              }]
+            }"
+            [type]="'doughnut'"
+          ></canvas>
+        </div>
+
+        <ng-template #valorSimple>
+          <div class="display-6 text-success mt-3">{{ metrica.valor }}</div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <button class="btn btn-secondary rounded-4" (click)="volver()">
+      ⬅️ Volver al Dashboard
+    </button>
+  </div>
+</section>
+
+<!-- Modal de descripción de métrica -->
+<div
+  *ngIf="modalAbierto"
+  [ngClass]="{ 'fade-in': !modalCerrando, 'fade-out': modalCerrando }"
+  class="modal show d-block"
+  tabindex="-1"
+  style="background: rgba(0,0,0,0.6);"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 p-4">
+      <h5 class="modal-title fw-bold text-primary mb-3">ℹ️ Información sobre la métrica</h5>
+      <p class="text-dark mb-3">{{ descripcionModal }}</p>
+      <div class="text-center mt-4">
+        <button class="btn btn-primary rounded-4" (click)="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Info de toda la página -->
+<ng-container *ngIf="showPageInfoModal">
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-md p-6">
+      <h3 class="text-xl font-semibold mb-4">ℹ️ ¿Qué muestran estas métricas?</h3>
+      <div class="text-gray-700 mb-4 text-left">
+        <p>
+          En este panel encontrarás estadísticas avanzadas de tu progreso:
+        </p>
+        <ul class="list-disc list-inside">
+          <li><strong>Porcentajes:</strong> Tu recuperación pulmonar, reducción de riesgos y más.</li>
+          <li><strong>Valores:</strong> Días sin fumar, cigarrillos evitados y dinero ahorrado.</li>
+        </ul>
+        <p class="mt-2">
+          Haz clic en cualquier tarjeta para ver una descripción detallada de cada métrica.
+          ¡Sigue analizando tus logros y mantén la motivación! 🚀
+        </p>
+      </div>
+      <div class="flex justify-end">
+        <button
+          class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+          (click)="closePageInfoModal()"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<app-navbar-inferior></app-navbar-inferior>

@@ -1,0 +1,199 @@
+<app-navbar-superior></app-navbar-superior>
+<section class="min-vh-100 d-flex flex-column justify-content-between text-center p-4"
+         style="background: linear-gradient(to bottom, #ffffff, #cce3f6, #83d0f9);">
+
+  <div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold">📓 Tu Diario Personal</h2>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-primary btn-sm rounded-4" (click)="irEstadisticasDiario()">
+            📈 Ver estadísticas
+          </button>
+          <button class="btn btn-outline-info btn-sm rounded-4" (click)="mostrarInfoDiario()">
+            ℹ️ Info
+          </button>
+        </div>
+      </div>
+
+    <!-- Resumen visual -->
+    <div class="row mb-4 text-start">
+      <div class="col-md-4">
+        <div class="card p-3 shadow-sm rounded-4">
+          <h6 class="text-muted">Total entradas</h6>
+          <h4 class="text-success">{{ entradas.length }} 📖</h4>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-3 shadow-sm rounded-4">
+          <h6 class="text-muted">Esta semana</h6>
+          <h4 class="text-success">{{ entradasEstaSemana() }} 📅</h4>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-3 shadow-sm rounded-4">
+          <h6 class="text-muted">Este mes</h6>
+          <h4 class="text-success">{{ entradasEsteMes() }} 🗓️</h4>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary mb-4" (click)="mostrarFormulario()" *ngIf="!isAdding">
+      ➕ Añadir Nueva Entrada
+    </button>
+
+  <!-- Formulario nueva entrada o edición -->
+  <div *ngIf="isAdding" class="card shadow-sm p-4 mb-4 rounded-4 text-start">
+    <h5 class="mb-3 text-success">{{ isEditing ? '✏️ Editar Entrada' : '➕ Nueva Entrada' }}</h5>
+
+    <!-- Emoción del día -->
+    <label class="fw-bold mb-2">😊 Emoción del Día</label>
+    <select [(ngModel)]="emocionDelDia"
+            [ngClass]="{'is-invalid': formularioEnviado && campoInvalido(emocionDelDia)}"
+            class="form-select mb-3">
+      <option value="">Selecciona tu emoción...</option>
+      <option *ngFor="let emocion of emocionesDisponibles" [value]="emocion.nombre">
+        {{ emocion.nombre }} - {{ emocion.descripcion }}
+      </option>
+    </select>
+
+    <!-- Estrategias -->
+    <div class="form-group mb-3 text-start">
+      <div class="p-3 rounded-4 border shadow-sm bg-white">
+        <label class="fw-bold mb-2">💡 Estrategias usadas:</label>
+        <div *ngFor="let estrategia of estrategiasDisponibles" class="form-check mb-2">
+          <input type="checkbox"
+                class="form-check-input"
+                [id]="estrategia.nombre"
+                [checked]="estrategiasUsadas.includes(estrategia.nombre)"
+                (change)="toggleEstrategia(estrategia.nombre)">
+          <label class="form-check-label ms-2" [for]="estrategia.nombre">
+            {{ estrategia.nombre }} - {{ estrategia.descripcion }}
+          </label>
+        </div>
+      </div>
+      <div *ngIf="formularioEnviado && estrategiasUsadas.length === 0" class="text-danger small mt-1">
+        Debes seleccionar al menos una estrategia.
+      </div>
+    </div>
+
+    <!-- Dificultades -->
+    <div class="form-group mb-3 text-start">
+      <div class="p-3 rounded-4 border shadow-sm bg-white">
+        <label class="fw-bold mb-2">⚡ Dificultades encontradas:</label>
+        <div *ngFor="let dificultad of dificultadesDisponibles" class="form-check mb-1">
+          <input type="checkbox"
+                class="form-check-input"
+                [id]="dificultad"
+                [checked]="dificultadesSeleccionadas.includes(dificultad)"
+                (change)="toggleDificultad(dificultad)">
+          <label class="form-check-label ms-2" [for]="dificultad">{{ dificultad }}</label>
+        </div>
+      </div>
+      <div *ngIf="formularioEnviado && dificultadesSeleccionadas.length === 0" class="text-danger small mt-1">
+        Debes seleccionar al menos una dificultad.
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="d-flex justify-content-center gap-3 mt-3">
+      <button class="btn btn-success" (click)="enviarEntrada()">
+        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+      </button>
+      <button class="btn btn-secondary" (click)="cancelarFormulario()">Cancelar</button>
+    </div>
+  </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="mt-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="errorMsg" class="alert alert-danger mt-3">
+      {{ errorMsg }}
+    </div>
+
+    <!-- Ordenador -->
+    <div class="d-flex justify-content-end mb-3" *ngIf="!isLoading && entradas.length > 0">
+      <select [(ngModel)]="ordenEntradas" (change)="ordenarEntradas()" class="form-select w-auto">
+        <option value="recientes">Más recientes primero</option>
+        <option value="antiguas">Más antiguas primero</option>
+      </select>
+    </div>
+
+    <!-- Lista de entradas paginadas -->
+    <div *ngIf="!isLoading && !errorMsg && entradas.length > 0">
+      <h4 class="text-success mb-3">📅 Historial de Entradas</h4>
+      <p class="text-muted small">
+        Mostrando entradas {{ entradasMostradas.length }} de {{ entradas.length }} totales
+      </p>
+
+      <div *ngIf="entradasMostradas && entradasMostradas.length > 0">
+        <div *ngFor="let entrada of entradasMostradas; trackBy: trackById" class="card shadow-sm mb-3 p-3 rounded-4 text-start">
+          <small class="text-muted">{{ entrada.fechaCreacion | date: 'short' }}</small>
+
+          <p class="mt-2">
+            <strong>😊 Emoción del Día:</strong> {{ entrada.emocionDelDia }} {{ obtenerEmojiEmocion(entrada.emocionDelDia) }}
+          </p>
+          <p>
+            <strong>💡 Estrategias Usadas:</strong> {{ entrada.estrategiasUsadas }} {{ obtenerEmojiEstrategia(entrada.estrategiasUsadas) }}
+          </p>
+          <p><strong>⚡ Complicaciones Encontradas:</strong> {{ entrada.complicacionesEncontradas }}</p>
+
+          <div class="d-flex justify-content-center gap-2 mt-2">
+            <button class="btn btn-outline-danger btn-sm" (click)="eliminarEntrada(entrada.id!)">🗑️ Eliminar</button>
+            <button class="btn btn-outline-primary btn-sm" (click)="editarEntrada(entrada)">✏️ Editar</button>
+          </div>
+        </div>
+
+        <!-- Responsive paginator adaptado a Xmoker -->
+        <div class="w-100 d-flex justify-content-center mt-4 mb-5 px-2">
+          <mat-paginator
+            [length]="length"
+            [pageSize]="pageSize"
+            [pageIndex]="pageIndex"
+            [pageSizeOptions]="[4, 8, 12]"
+            (page)="onPageChange($event)"
+            showFirstLastButtons
+            class="w-100 max-w-screen-sm mx-auto rounded-4 shadow-sm bg-white border border-light-subtle">
+          </mat-paginator>
+        </div>
+
+      </div>
+
+      <!-- Mensaje si no hay entradas en la página actual -->
+      <div *ngIf="!entradasMostradas || entradasMostradas.length === 0" class="alert alert-info mt-3">
+        No hay entradas para mostrar en esta página.
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && entradas.length === 0" class="text-muted mt-3">
+      Aún no has registrado entradas. ¡Hoy puede ser un gran comienzo! 🚀
+    </div>
+
+  </div>
+
+</section>
+
+<!-- Modal info -->
+<div *ngIf="modalInfoAbierto"
+     [ngClass]="{'slide-up-fade-in': !modalInfoCerrando, 'slide-down-fade-out': modalInfoCerrando}"
+     class="modal show d-block" tabindex="-1" style="background: rgba(0,0,0,0.6);">
+
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 p-4">
+      <h5 class="modal-title fw-bold text-primary mb-3">ℹ️ ¿Qué es el Diario?</h5>
+      <p class="text-dark">
+        Aquí puedes registrar tus emociones, estrategias y complicaciones día a día.
+        ¡El Diario es tu mejor herramienta para seguir creciendo sin humo! 🚀
+      </p>
+      <div class="text-center mt-4">
+        <button class="btn btn-primary rounded-4" (click)="cerrarInfoDiario()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-navbar-inferior></app-navbar-inferior>

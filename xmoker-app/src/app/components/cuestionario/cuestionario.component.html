@@ -1,0 +1,56 @@
+<section class="min-vh-100 d-flex justify-content-center align-items-center text-center p-4"
+         style="background: linear-gradient(to bottom, #ffffff, #cce3f6, #83d0f9);">
+
+  <div class="container bg-white shadow-lg rounded-4 p-5" style="max-width: 600px; width: 100%;">
+    
+    <!-- Barra de progreso -->
+    <div *ngIf="paso > 0 && paso <= preguntas.length" class="mb-4 text-center">
+      <div class="progress" style="height: 10px;">
+        <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+             role="progressbar"
+             [style.width.%]="(paso / preguntas.length) * 100"
+             aria-valuemin="0" aria-valuemax="100">
+        </div>
+      </div>
+      <div class="mt-2 fw-medium text-dark small">Pregunta {{ paso }} de {{ preguntas.length }}</div>
+    </div>
+
+    <form (keydown.enter)="$event.preventDefault()" class="d-flex flex-column gap-3 text-start">
+
+      <!-- Introducción inicial -->
+      <div *ngIf="paso === 0 && !respuestas.length" class="fade-in">
+        <h3 class="text-primary fw-bold mb-3">¡Hola {{ nombre }}! 👋</h3>
+        <p class="text-dark fw-medium">
+          Antes de continuar, vamos a hacer un breve cuestionario para conocerte mejor.<br />
+          Tus respuestas nos ayudarán a entender <strong>por qué fumas</strong> y cómo acompañarte en tu camino 😊
+        </p>
+        <button class="btn btn-primary mt-3" (click)="paso = 1">Empezar</button>
+      </div>
+
+      <!-- Preguntas -->
+      <div *ngIf="paso > 0 && paso <= preguntas.length" class="fade-in">
+        <p class="fw-semibold mb-2 text-dark">Pregunta {{ paso }} de {{ preguntas.length }}</p>
+        <h5 class="text-dark mb-4">{{ preguntas[paso - 1] }}</h5>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+          <button *ngFor="let valor of [1, 2, 3, 4, 5]" type="button"
+                  class="btn btn-outline-primary px-4 py-2"
+                  (click)="seleccionarRespuesta(valor)">
+            {{ valor }}
+          </button>
+        </div>
+
+        <small class="text-muted d-block mt-3">1: Nada cierto — 5: Muy cierto</small>
+      </div>
+
+      <div *ngIf="paso === preguntas.length" class="fade-in">
+        <h2 class="text-primary">¡Este es tu perfil de fumador!</h2>
+        <p class="fw-semibold">Categorías más destacadas: {{ perfilResultado }}</p>
+        <p class="text-muted">{{ perfilMensaje }}</p>
+      
+        <button class="btn btn-success mt-4" (click)="irAlDashboard()">Ir al inicio</button>
+      </div>
+      
+    </form>
+  </div>
+</section>

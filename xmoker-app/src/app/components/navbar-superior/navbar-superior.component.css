@@ -1,0 +1,6 @@
+:host {
+    position: relative; /* ya no es fixed */
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+  

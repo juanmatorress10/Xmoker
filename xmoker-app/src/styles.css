@@ -1,0 +1,12 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.fondo-xmoker {
+  min-height: calc(100vh - 140px); /* pantalla completa menos 2 navs */
+  background: linear-gradient(to bottom, #ffffff, #cce3f6, #0077b6);
+  padding: 1rem;
+}

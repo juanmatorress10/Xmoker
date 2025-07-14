@@ -1,0 +1,17 @@
+<div class="relative">
+  <button (click)="toggleDropdown()" class="flex items-center">
+    <img [src]="'http://localhost:9090/' + (user.fotoPerfilUrl || 'images/user-icon.png')" 
+    alt="Avatar" class="w-10 h-10 rounded-full border" />
+  </button>
+
+  <div *ngIf="dropdownOpen" class="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-xl border z-50">
+    <div class="p-4 border-b">
+      <h4 class="text-base font-semibold">Mi cuenta</h4>
+      <p *ngIf="user.nombre" class="text-sm text-gray-700 font-medium">👤 {{ user.nombre }}</p>
+      <p *ngIf="user.email" class="text-sm text-gray-500">📧 {{ user.email }}</p>
+      <p *ngIf="user.tipoFumador" class="text-sm text-gray-500">💨 {{ user.tipoFumador }}</p>
+    </div>
+    <div class="p-3 hover:bg-gray-100 cursor-pointer" (click)="goToSettings()">⚙️ Configuración</div>
+    <div class="p-3 hover:bg-gray-100 cursor-pointer" (click)="logout()">🚪 Cerrar sesión</div>
+  </div>
+</div>

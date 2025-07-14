@@ -1,0 +1,56 @@
+<div class="p-4 rounded-2xl shadow-md border transition-all"
+     [ngClass]="completado || disponibleParaReclamar ? 'bg-green-100 border-green-400' : 'bg-gray-100 border-gray-300 opacity-50'">
+
+  <!-- Cabecera del logro -->
+  <div class="flex items-center gap-4 mb-2">
+    <img [src]="'http://localhost:9090' + usuarioLogro.logro.iconoUrl"
+         alt="Icono"
+         class="w-12 h-12 rounded" />
+    <div>
+      <h3 class="text-lg font-bold">{{ usuarioLogro.logro.nombre }}</h3>
+      <p class="text-sm text-gray-600">{{ usuarioLogro.logro.descripcion }}</p>
+    </div>
+  </div>
+
+  <!-- Progreso -->
+  <div class="text-xs text-gray-500">
+    {{ usuarioLogro.progresoActual }}/{{ usuarioLogro.logro.valorObjetivo }}
+  </div>
+
+  <div class="w-full bg-gray-300 rounded h-2 mt-1">
+    <div class="bg-green-500 h-2 rounded transition-all"
+         [style.width.%]="calcularPorcentaje()">
+    </div>
+  </div>
+
+  <!-- Fecha de logro -->
+  <div *ngIf="completado && usuarioLogro.fechaAlcanzado" class="text-xs text-green-700 mt-2">
+    Logro alcanzado el {{ usuarioLogro.fechaAlcanzado | date:'shortDate' }}
+  </div>
+
+  <!-- Listo para reclamar -->
+  <div *ngIf="disponibleParaReclamar && !completado" class="text-sm text-blue-600 mt-2">
+    🎯 ¡Listo para reclamar!
+  </div>
+
+  <!-- Reclamar recompensa -->
+  <div class="mt-3 text-center" *ngIf="completado || disponibleParaReclamar">
+    <button *ngIf="!usuarioLogro.reclamado && !reclamando"
+            class="btn btn-success btn-sm px-4 py-1 rounded"
+            (click)="reclamarLogro()">
+      🎁 Reclamar recompensa
+    </button>
+
+    <div *ngIf="usuarioLogro.reclamado" class="text-green-600 text-sm font-semibold">
+      ✅ Recompensa reclamada
+    </div>
+
+    <div *ngIf="reclamando" class="text-gray-500 text-sm italic">
+      Procesando...
+    </div>
+
+    <div *ngIf="mensajeExito" class="text-green-600 text-sm mt-1">
+      {{ mensajeExito }}
+    </div>
+  </div>
+</div>

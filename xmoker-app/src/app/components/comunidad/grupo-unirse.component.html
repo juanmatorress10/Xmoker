@@ -1,0 +1,88 @@
+<app-navbar-superior></app-navbar-superior>
+
+<div class="bg-xmoker-gradient min-h-[calc(100vh-140px)] px-4 py-6">
+  <div class="max-w-xl mx-auto bg-white shadow rounded p-6">
+    <h2 class="text-2xl font-bold text-blue-800 mb-4 text-center">
+      🔑 Unirse a un grupo privado
+    </h2>
+
+    <form
+      #form="ngForm"
+      (ngSubmit)="unirse()"
+      class="space-y-4"
+    >
+      <!-- Campo del código -->
+      <div>
+        <label
+          for="codigo"
+          class="block text-sm font-medium text-gray-700"
+        >
+          Código de acceso
+        </label>
+        <input
+          id="codigo"
+          name="codigo"
+          type="text"
+          [(ngModel)]="codigo"
+          #codeModel="ngModel"
+          required
+          minlength="4"
+          class="mt-1 block w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          [class.border-red-500]="codeModel.invalid && codeModel.touched"
+          [disabled]="loading"
+          placeholder="Ej. ABCD1234"
+        />
+        <!-- Mensaje de validación nativo -->
+        <p
+          *ngIf="codeModel.invalid && codeModel.touched"
+          class="text-red-600 text-sm mt-1"
+        >
+          El código es obligatorio (mínimo 4 caracteres).
+        </p>
+        <!-- Mensaje de error del servidor -->
+        <p
+          *ngIf="errorMsg"
+          class="text-red-600 text-sm mt-1"
+        >
+          {{ errorMsg }}
+        </p>
+      </div>
+
+      <!-- Botón de envío -->
+      <button
+        type="submit"
+        class="btn btn-primary w-full mt-4 flex justify-center items-center"
+        [disabled]="form.invalid || loading"
+      >
+        <!-- Icono de carga -->
+        <svg
+          *ngIf="loading"
+          class="animate-spin h-5 w-5 mr-2 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+          ></path>
+        </svg>
+
+        <!-- Texto del botón -->
+        <span *ngIf="!loading">🤝 Unirme al grupo</span>
+        <span *ngIf="loading">Uniendo...</span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<app-navbar-inferior></app-navbar-inferior>
