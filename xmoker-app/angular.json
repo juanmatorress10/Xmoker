@@ -1,7 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "defaultProject": "xmoker-app",
   "newProjectRoot": "projects",
   "projects": {
     "xmoker-app": {
@@ -13,7 +12,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/xmoker-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -22,9 +21,10 @@
               { "glob": "**/*", "input": "public", "output": "/" }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/azure-blue.css",
+              "src/styles.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css"
+              "node_modules/tailwindcss/tailwind.css",
+              "@angular/material/prebuilt-themes/azure-blue.css"
             ],
             "scripts": []
           },
@@ -39,8 +39,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2MB",      
-                  "maximumError": "5MB"        
+                  "maximumWarning": "2MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -58,19 +58,19 @@
               "vendorChunk": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "xmoker-app:build"
+            "buildTarget": "xmoker-app:build:development"
           },
           "configurations": {
             "production": {
-              "browserTarget": "xmoker-app:build:production"
+              "buildTarget": "xmoker-app:build:production"
             },
             "development": {
-              "browserTarget": "xmoker-app:build:development"
+              "buildTarget": "xmoker-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -81,14 +81,14 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": ["zone.js","zone.js/testing"],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               { "glob": "**/*", "input": "public", "output": "/" }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/azure-blue.css",
-              "src/styles.css"
+              "src/styles.css",
+              "@angular/material/prebuilt-themes/azure-blue.css"
             ],
             "scripts": []
           }

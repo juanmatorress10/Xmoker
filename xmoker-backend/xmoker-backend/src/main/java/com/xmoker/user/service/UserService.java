@@ -23,10 +23,15 @@ public class UserService {
     }
 
     public Usuario registrar(Usuario usuario) {
+        // 1. Asigna un rol por defecto si es nulo para evitar el NullPointerException
+        if (usuario.getRol() == null) {
+            usuario.setRol(RolUsuario.USUARIO); // O el rol que prefieras por defecto
+        }
 
-
+        // 2. Codifica la contraseña (esto ya lo tenías bien)
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
+        // 3. El switch ahora es seguro y nunca recibirá un valor nulo
         switch (usuario.getRol()) {
             case USUARIO -> {
                 Progreso progreso = new Progreso();
@@ -39,10 +44,9 @@ public class UserService {
                 progreso.setRecaidas(new ArrayList<>());
                 usuario.setProgreso(progreso);
             }
-
             case PROFESIONAL -> {
+                // Lógica para el profesional si es necesaria
             }
-
             case ADMINISTRADOR -> {
                 AdminDatos admin = new AdminDatos();
                 admin.setRolDentroDelSistema("Moderador");
@@ -52,6 +56,7 @@ public class UserService {
             }
         }
 
+        // 4. Guarda el usuario en la base de datos
         return userRepository.save(usuario);
     }
 
