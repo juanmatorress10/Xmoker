@@ -48,3 +48,6 @@ export class AuthService {
     localStorage.clear();
   }
 }
+
+// realizo un cambio en el nombre de la variable para que sea más descriptivo
+// y fácil de entender. En lugar de "apiUsuarios", uso "apiAuth" para la URL de autenticación.
