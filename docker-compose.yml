@@ -1,4 +1,3 @@
-version: "3.9"
 
 services:
   db:
@@ -9,18 +8,15 @@ services:
       POSTGRES_USER: xmoker
       POSTGRES_PASSWORD: xmoker123
     ports:
-      - "10070:5432"   # Exponemos en el puerto permitido
+      - "10070:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
   backend:
-    build:
-      context: ./xmoker-backend/xmoker-backend
-      dockerfile: Dockerfile
-    image: xmoker-backend
+    image: xmoker-backend:1.0
     container_name: xmoker-backend
     ports:
-      - "10071:9090"   # Puerto permitido
+      - "10071:9090"
     depends_on:
       - db
     environment:
@@ -30,13 +26,11 @@ services:
     restart: always
 
   frontend:
-    build:
-      context: ./xmoker-app
-      dockerfile: Dockerfile
-    image: xmoker-frontend
+    image: xmoker-frontend:1.0
     container_name: xmoker-frontend
     ports:
-      - "10072:80"     # Puerto permitido
+    - "10072:80"      # Para servir la web
+    - "10071:9090" # Para servir la API
     depends_on:
       - backend
     restart: always

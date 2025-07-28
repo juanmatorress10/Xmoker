@@ -1,26 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment'; // ✅ Importamos environment
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUsuarios = 'http://localhost:9090/api/usuarios';
-  private apiAuth     = 'http://localhost:9090/api/auth';
+  private apiUsuarios = `${environment.apiUrl}/usuarios`;
+  private apiAuth     = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient) {}
 
   // 🔹 Registro de usuario
   registrar(usuario: any): Observable<{ usuario: any; token: string }> {
-    // Cambia tu endpoint backend para que devuelva { usuario, token }
     return this.http.post<{ usuario: any; token: string }>(
-      `${this.apiUsuarios}`,
+      this.apiUsuarios,
       usuario
     );
   }
 
   // 🔹 Login de usuario
   login(credentials: any): Observable<string> {
-    // Te devuelve sólo el token en texto
     return this.http.post(
       `${this.apiAuth}/login`,
       credentials,
@@ -35,14 +34,16 @@ export class AuthService {
     return this.http.get(`${this.apiUsuarios}/me`, { headers });
   }
 
-  // — getters para localStorage —
+  // — Getters para localStorage —
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+
   getUsuario(): any {
     const raw = localStorage.getItem('usuario');
     return raw ? JSON.parse(raw) : null;
   }
+
   logout() {
     localStorage.clear();
   }
