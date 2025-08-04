@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface DiarioEntrada {
   id?: number;
@@ -15,7 +16,7 @@ export interface DiarioEntrada {
   providedIn: 'root'
 })
 export class DiarioService {
-  private apiUrl = 'http://localhost:9090/api/diario'; // Asegúrate de cambiarlo si tu backend tiene otra URL
+  private apiUrl = `${environment.apiUrl}/diario`; // Asegúrate de cambiarlo si tu backend tiene otra URL
 
   constructor(private http: HttpClient) {}
 

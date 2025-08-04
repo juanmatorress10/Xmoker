@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
 
-  private apiBaseUrl = 'http://localhost:9090/api'; // Ajusta según tu backend
+  private apiBaseUrl = `${environment.apiUrl}`; // Ajusta según tu backend
 
   constructor(private http: HttpClient) {}
 

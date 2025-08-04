@@ -30,7 +30,6 @@ services:
     container_name: xmoker-frontend
     ports:
     - "10072:80"      # Para servir la web
-    - "10071:9090" # Para servir la API
     depends_on:
       - backend
     restart: always

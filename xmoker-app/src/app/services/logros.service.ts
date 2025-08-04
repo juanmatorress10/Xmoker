@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UsuarioLogro } from '../models/logros.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LogrosService {
-  private API_URL = 'http://localhost:9090/api/logros';
+  private API_URL = `${environment.apiUrl}/logros`;
 
   constructor(private http: HttpClient) {}
 

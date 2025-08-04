@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Recaida {
   fecha: Date;
@@ -10,7 +11,7 @@ export interface Recaida {
 
 @Injectable({ providedIn: 'root' })
 export class RecaidaService {
-  private apiUrl = 'http://localhost:9090/api/recaidas';
+  private apiUrl = `${environment.apiUrl}/recaidas`;
 
   constructor(private http: HttpClient) {}
 
