@@ -17,7 +17,10 @@ public class WebConfig implements WebMvcConfigurer {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        config.setAllowedOrigins(Arrays.asList(
+                "http://localhost:4200",                  // desarrollo local
+                "http://galeon.ugr.es:10072"              // producción: frontend desplegado
+        ));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
@@ -27,7 +30,6 @@ public class WebConfig implements WebMvcConfigurer {
         return new CorsFilter(source);
     }
 
-    // ✅ Apunta correctamente a la carpeta real donde guardas
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")

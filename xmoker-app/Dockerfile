@@ -1,22 +1,30 @@
-# 1) Etapa de build con Node
+# Stage 1: Build the Angular application
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+# Copia los archivos de dependencias y las instala
+# Usar 'npm ci' es una buena práctica si tienes un package-lock.json
+COPY package*.json ./
 RUN npm ci --legacy-peer-deps
 
+# Copia el resto del código fuente de la aplicación
 COPY . .
-RUN npm run build
 
-# 2) Etapa de runtime con Nginx
+# Crea la versión de producción optimizada de la aplicación
+RUN npm run build -- --configuration production
+
+# Stage 2: Serve the application with Nginx
 FROM nginx:stable-alpine
-RUN rm /etc/nginx/conf.d/default.conf
 
+# Copia la configuración personalizada de Nginx
+# Esto sobrescribe el 'default.conf', por lo que no es necesario borrarlo antes
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist /usr/share/nginx/html
 
-# ✅ Exponemos también el 9090 para el proxy simulado
+# Copia los archivos de la aplicación construidos desde la etapa 'builder'
+COPY --from=builder /app/dist/xmoker-app/ /usr/share/nginx/html/
+
+# Expone el puerto 80, que es el puerto estándar de Nginx
 EXPOSE 80
-EXPOSE 9090
 
+# Inicia el servidor Nginx cuando el contenedor arranque
 CMD ["nginx", "-g", "daemon off;"]
