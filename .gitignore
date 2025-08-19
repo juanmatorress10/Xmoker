@@ -76,6 +76,9 @@ desktop.ini
 # ## PAQUETES COMPRIMIDOS
 # Ignora cualquier paquete que se haya podido generar.
 *.tgz
+*.tar
+*.tar.gz
+*.zip
 
 # ## ARCHIVOS DE IMAGEN 
 # Ignora los formatos de imagen más comunes. Esto es útil si tu aplicación permite a los
