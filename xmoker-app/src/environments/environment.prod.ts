@@ -1,4 +1,6 @@
+const host = typeof window !== 'undefined' ? window.location.origin : '';
+
 export const environment = {
   production: true,
-  apiUrl: '/api'
+  apiUrl: `${host}/api`
 };
